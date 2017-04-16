@@ -64,6 +64,87 @@ int main(int argc, char* args[])
 			}
 		}
 	} monster(renderer, "assets/MONSTER-sheet.png");
+	struct Maze : SDLtexture
+	{
+		// 8 x 4 tiles as bits
+		Uint32 tile_bits = 0x3B7FF33Eu;
+		SDLrenderer & renderer;
+		
+		// x, y relative to center
+		bool collides(int x, int y)
+		{
+			x += w * 4; y += h * 2;
+			if (x < 0 || y < 0)
+				return false;
+			x /= w; y /= h;
+			if (x > 7 || y > 3)
+				return false;
+			int tile = x + y * 8;
+			return tile_bits & (1 << tile);
+		}
+
+		void draw()
+		{
+			SDL_Rect dst;
+			for (int i = 0; i < 32; ++i)
+			{
+				if (tile_bits & (1 << i))
+				{
+					dst = { SCREEN_W / 2 + (w * (i % 8 - 4)), SCREEN_H / 2 + (h * (i / 8 - 2)), w, h };
+					renderer.copy(*this, nullptr, &dst);
+				}
+			}
+		}
+
+		Maze(SDLrenderer & renderer, const char * image_file)
+			: SDLtexture(renderer, image_file), renderer(renderer)
+		{
+			set_blend_mode(SDL_BLENDMODE_NONE);
+		}
+	} maze(renderer, "assets/dirtCenter.png");
+	struct Explorer : SDLtexture
+	{
+		int x = 0, y = 0;
+		const int ycrop = 20;
+		SDLrenderer & renderer;
+		Maze & maze;
+
+		void move(SDL_Keycode key)
+		{
+			switch (key)
+			{
+			case SDLK_LEFT:
+				if (maze.collides(x - 1, y) && maze.collides(x - 1, y + h - ycrop))
+					--x;
+				break;
+			case SDLK_RIGHT:
+				if (maze.collides(x + w + 1, y) && maze.collides(x + w + 1, y + h - ycrop))
+					++x;
+				break;
+			case SDLK_UP:
+				if (maze.collides(x, y - 1) && maze.collides(x + w, y - 1))
+					--y;
+				break;
+			case SDLK_DOWN:
+				if (maze.collides(x, y + h - ycrop + 1) && maze.collides(x + w, y + h - ycrop + 1))
+					++y;
+				break;
+			}
+		}
+
+		void draw()
+		{
+			SDL_Rect dst = {SCREEN_W / 2 + x, SCREEN_H / 2 + y, w, h};
+			renderer.copy(*this, nullptr, &dst);
+		}
+
+		Explorer(SDLrenderer & renderer, SDLfont & font, Maze & maze)
+			: SDLtexture(renderer, font, "X", {150, 150, 0})
+			, renderer(renderer), maze(maze)
+		{
+			set_blend_mode(SDL_BLENDMODE_BLEND);
+		}
+	};
 
 	// init text objects
 	SDLfont oj("assets/orange juice 2.0.ttf", 72);
@@ -77,6 +158,8 @@ int main(int argc, char* args[])
 	SDL_Rect text_rects[5];
 	for (int i = 0; i < 5; ++i)
 		text_rects[i] = { (SCREEN_W - texts[i].w) / 2, SCREEN_H * i / 5 - texts[i].h / 2, texts[i].w, texts[i].h };
+
+	Explorer explorer(renderer, oj, maze);
 	
 	int scene = 0; // menu scene
 	int selection = 1;
@@ -105,6 +188,8 @@ int main(int argc, char* args[])
 			monster.advance_frame();
 			break;
 		case 3: // collision demo
+			maze.draw();
+			explorer.draw();
 			break;
 		}
 
@@ -128,12 +213,16 @@ int main(int argc, char* args[])
 						selection = selection % 4 + 1;
 					if (scene == 2)
 						monster.animating = !monster.animating;
+					if (scene == 3)
+						explorer.move(SDLK_DOWN);
 					break;
 				case SDLK_UP:
 				case SDLK_k:
 				case SDLK_w:
 					if (scene == 0)
 						selection = (selection + 2) % 4 + 1;
+					if (scene == 3)
+						explorer.move(SDLK_UP);
 					break;
 				case SDLK_LEFT:
 				case SDLK_h:
@@ -145,6 +234,8 @@ int main(int argc, char* args[])
 					}
 					if (scene == 2)
 						monster.angle += 1;
+					if (scene == 3)
+						explorer.move(SDLK_LEFT);
 					break;
 				case SDLK_RIGHT:
 				case SDLK_l:
@@ -156,6 +247,8 @@ int main(int argc, char* args[])
 					}
 					if (scene == 2)
 						monster.angle -= 1;
+					if (scene == 3)
+						explorer.move(SDLK_RIGHT);
 					break;
 				case SDLK_RETURN:
 				case SDLK_SPACE:
