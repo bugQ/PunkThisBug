@@ -175,6 +175,7 @@ int main(int argc, char* args[])
 	
 	int scene = 0; // menu scene
 	int selection = 1;
+	SDL_Keycode last_key = -1, joy_key = -1;
 
 	while (scene < 4)
 	{
@@ -195,15 +196,31 @@ int main(int argc, char* args[])
 				renderer.copy(texts[i], nullptr, &text_rects[i]);
 			break;
 		case 1: // parallax demo
+			if (joy_key == SDLK_RIGHT)
+			{
+				bg2.pos -= 3;
+				bg1.pos -= 7;
+			}
+			else if (joy_key == SDLK_LEFT)
+			{
+				bg2.pos += 3;
+				bg1.pos += 7;
+			}
 			bg2.draw();
 			bg1.draw();
 			break;
 		case 2: // animation demo
+			if (joy_key == SDLK_RIGHT)
+				monster.angle += 1;
+			else if (joy_key == SDLK_LEFT)
+				monster.angle -= 1;
 			renderer.copy(monster, &monster.src_rect, &monster.dst_rect, monster.angle);
 			monster.advance_frame();
 			break;
 		case 3: // collision demo
 			maze.draw();
+			if (joy_key != -1)
+				explorer.move(joy_key);
 			explorer.draw();
 			break;
 		}
@@ -243,8 +260,18 @@ int main(int argc, char* args[])
 					}
 				}
 				break;
+			case SDL_KEYUP:
+				if (event.key.keysym.sym == last_key)
+				{
+					last_key = -1;
+					joy_key = -1;
+				}
+				break;
 			case SDL_KEYDOWN:
-				switch (event.key.keysym.sym)
+				if (event.key.keysym.sym == last_key)
+					break;
+				last_key = event.key.keysym.sym;
+				switch (last_key)
 				{
 				case SDLK_DOWN:
 				case SDLK_j:
@@ -256,8 +283,7 @@ int main(int argc, char* args[])
 					}
 					if (scene == 2)
 						monster.animating = !monster.animating;
-					if (scene == 3)
-						explorer.move(SDLK_DOWN);
+					joy_key = SDLK_DOWN;
 					break;
 				case SDLK_UP:
 				case SDLK_k:
@@ -267,34 +293,17 @@ int main(int argc, char* args[])
 						selection = (selection + 2) % 4 + 1;
 						mixer.play_chunk(0);
 					}
-					if (scene == 3)
-						explorer.move(SDLK_UP);
+					joy_key = SDLK_UP;
 					break;
 				case SDLK_LEFT:
 				case SDLK_h:
 				case SDLK_a:
-					if (scene == 1)
-					{
-						bg1.pos += 7;
-						bg2.pos += 3;
-					}
-					if (scene == 2)
-						monster.angle += 1;
-					if (scene == 3)
-						explorer.move(SDLK_LEFT);
+					joy_key = SDLK_LEFT;
 					break;
 				case SDLK_RIGHT:
 				case SDLK_l:
 				case SDLK_d:
-					if (scene == 1)
-					{
-						bg1.pos -= 7;
-						bg2.pos -= 3;
-					}
-					if (scene == 2)
-						monster.angle -= 1;
-					if (scene == 3)
-						explorer.move(SDLK_RIGHT);
+					joy_key = SDLK_RIGHT;
 					break;
 				case SDLK_RETURN:
 				case SDLK_SPACE:

@@ -14,7 +14,7 @@ public:
 	int load_chunk(const char * audio_file);
 	int load_music(const char * audio_file);
 	bool play_music(int id, int loops = -1);
-	bool play_chunk(int id, int loops = 1);
+	bool play_chunk(int id, int loops = 0);
 	int current_music();
 };
 
