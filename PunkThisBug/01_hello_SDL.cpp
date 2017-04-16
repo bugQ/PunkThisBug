@@ -21,6 +21,26 @@ int main(int argc, char* args[])
 	SDLrenderer renderer(window, 0, SDL_RENDERER_SOFTWARE);
 
 	// init sprite objects
+	struct ScrollingBG : SDLtexture {
+		int pos = 0;
+		SDLrenderer & renderer;
+
+		ScrollingBG(SDLrenderer & renderer, const char * image_file)
+			: SDLtexture(renderer, image_file), renderer(renderer)
+		{
+			set_blend_mode(SDL_BLENDMODE_BLEND);
+		}
+		void draw()
+		{
+			pos = (pos + w) % w;
+			SDL_Rect src = {w-pos, 0, pos, h};
+			SDL_Rect dst = {0, SCREEN_H - h, pos, h};
+			renderer.copy(*this, &src, &dst);
+			src.x = 0;  dst.x = pos;
+			src.w = dst.w = w - pos;
+			renderer.copy(*this, &src, &dst);
+		}
+	} bg1(renderer, "assets/parallax_bg1.png"), bg2(renderer, "assets/parallax_bg2.png");
 	struct Monster : SDLtexture {
 		bool animating;
 		int frame = 0;
@@ -33,8 +53,6 @@ int main(int argc, char* args[])
 			, dst_rect({ (SCREEN_W - w / 8) / 2, (SCREEN_H - h) / 2, w / 8, h })
 		{
 			set_blend_mode(SDL_BLENDMODE_BLEND);
-			set_color(255, 255, 255);
-			set_alpha(255);
 		}
 
 		void advance_frame()
@@ -45,8 +63,7 @@ int main(int argc, char* args[])
 				src_rect.x = frame * w / 8;
 			}
 		}
-	};
-	Monster monster(renderer, "assets/MONSTER-sheet.png");
+	} monster(renderer, "assets/MONSTER-sheet.png");
 
 	// init text objects
 	SDLfont oj("assets/orange juice 2.0.ttf", 72);
@@ -80,6 +97,8 @@ int main(int argc, char* args[])
 				renderer.copy(texts[i], nullptr, &text_rects[i]);
 			break;
 		case 1: // parallax demo
+			bg2.draw();
+			bg1.draw();
 			break;
 		case 2: // animation demo
 			renderer.copy(monster, &monster.src_rect, &monster.dst_rect, monster.angle);
@@ -119,12 +138,22 @@ int main(int argc, char* args[])
 				case SDLK_LEFT:
 				case SDLK_h:
 				case SDLK_a:
+					if (scene == 1)
+					{
+						bg1.pos += 7;
+						bg2.pos += 3;
+					}
 					if (scene == 2)
 						monster.angle += 1;
 					break;
 				case SDLK_RIGHT:
 				case SDLK_l:
 				case SDLK_d:
+					if (scene == 1)
+					{
+						bg1.pos -= 7;
+						bg2.pos -= 3;
+					}
 					if (scene == 2)
 						monster.angle -= 1;
 					break;
