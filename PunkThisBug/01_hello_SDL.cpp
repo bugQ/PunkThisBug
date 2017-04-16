@@ -172,6 +172,9 @@ int main(int argc, char* args[])
 						quit = true;
 					}
 					break;
+				case SDLK_f:
+					window.toggle_fullscreen();
+					break;
 				case SDLK_ESCAPE:
 				case SDLK_q:
 				case SDLK_BACKSPACE:

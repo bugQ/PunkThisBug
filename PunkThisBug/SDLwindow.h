@@ -7,5 +7,7 @@ struct SDLwindow
 
 	SDLwindow(const char * title, int x, int y, int w, int h, Uint32 flags);
 	~SDLwindow();
+
+	int toggle_fullscreen();
 };
 

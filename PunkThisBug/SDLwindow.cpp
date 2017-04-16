@@ -15,3 +15,11 @@ SDLwindow::~SDLwindow()
 {
 	SDL_DestroyWindow(ptr);
 }
+
+int SDLwindow::toggle_fullscreen()
+{
+	if (SDL_GetWindowFlags(ptr) & SDL_WINDOW_FULLSCREEN)
+		return SDL_SetWindowFullscreen(ptr, 0);
+	else
+		return SDL_SetWindowFullscreen(ptr, SDL_WINDOW_FULLSCREEN);
+}
