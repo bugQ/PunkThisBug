@@ -27,9 +27,12 @@ bool SDLrenderer::clear()
 	return !SDL_RenderClear(ptr);
 }
 
-bool SDLrenderer::copy(SDLtexture & texture, SDL_Rect * src, SDL_Rect * dst)
+bool SDLrenderer::copy(SDLtexture & texture, SDL_Rect * src, SDL_Rect * dst, double angle)
 {
-	return !SDL_RenderCopy(ptr, texture.ptr, src, dst);
+	if (angle == 0.0f)
+		return !SDL_RenderCopy(ptr, texture.ptr, src, dst);
+	else
+		return !SDL_RenderCopyEx(ptr, texture.ptr, src, dst, angle, nullptr, SDL_FLIP_NONE);
 }
 
 void SDLrenderer::present()

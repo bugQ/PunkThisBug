@@ -26,3 +26,18 @@ SDLtexture::~SDLtexture()
 {
 	SDL_DestroyTexture(ptr);
 }
+
+bool SDLtexture::set_blend_mode(SDL_BlendMode mode)
+{
+	return !SDL_SetTextureBlendMode(ptr, mode);
+}
+
+bool SDLtexture::set_color(Uint8 r, Uint8 g, Uint8 b)
+{
+	return !SDL_SetTextureColorMod(ptr, r, g, b);
+}
+
+bool SDLtexture::set_alpha(Uint8 alpha)
+{
+	return !SDL_SetTextureAlphaMod(ptr, alpha);
+}
