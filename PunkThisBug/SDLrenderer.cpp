@@ -27,12 +27,12 @@ bool SDLrenderer::clear()
 	return !SDL_RenderClear(ptr);
 }
 
-bool SDLrenderer::render(SDLtexture & texture, SDL_Rect * src, SDL_Rect * dst)
+bool SDLrenderer::copy(SDLtexture & texture, SDL_Rect * src, SDL_Rect * dst)
 {
 	return !SDL_RenderCopy(ptr, texture.ptr, src, dst);
 }
 
-void SDLrenderer::update()
+void SDLrenderer::present()
 {
 	SDL_RenderPresent(ptr);
 }

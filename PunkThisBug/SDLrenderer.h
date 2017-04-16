@@ -13,7 +13,7 @@ struct SDLrenderer
 
 	bool set_draw_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	bool clear();
-	bool render(SDLtexture & texture, SDL_Rect * src, SDL_Rect * dst);
-	void update();
+	bool copy(SDLtexture & texture, SDL_Rect * src, SDL_Rect * dst);
+	void present();
 };
 
