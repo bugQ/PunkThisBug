@@ -149,10 +149,10 @@ int main(int argc, char* args[])
 	// init text objects
 	SDLfont oj("assets/orange juice 2.0.ttf", 72);
 	SDLtexture texts[5] = {
-		SDLtexture(renderer, oj, ">                   <", {150, 150, 150}),
-		SDLtexture(renderer, oj, "Scene 1", {150, 0, 0}),
-		SDLtexture(renderer, oj, "Scene 2", {0, 150, 0}),
-		SDLtexture(renderer, oj, "Scene 3", {0, 0, 150}),
+		SDLtexture(renderer, oj, ">                                                              <", {150, 150, 150}),
+		SDLtexture(renderer, oj, "Parallax Background Demo", {150, 0, 0}),
+		SDLtexture(renderer, oj, "Sprite Animation Demo", {0, 150, 0}),
+		SDLtexture(renderer, oj, "Grid Collision Demo", {0, 0, 150}),
 		SDLtexture(renderer, oj, "Quit", {0, 0, 0}),
 	};
 	SDL_Rect text_rects[5];
@@ -164,8 +164,7 @@ int main(int argc, char* args[])
 	int scene = 0; // menu scene
 	int selection = 1;
 
-	bool quit = false;
-	while (!quit)
+	while (scene < 4)
 	{
 		// clear to white
 		renderer.set_draw_color(255, 255, 255, 255);
@@ -275,18 +274,7 @@ int main(int argc, char* args[])
 				case SDLK_RETURN:
 				case SDLK_SPACE:
 				case SDLK_KP_ENTER:
-					switch (selection)
-					{
-					case 1:
-					case 2:
-					case 3:
-						scene = selection;
-						break;
-					case 4:
-					default:
-						quit = true;
-					}
-					break;
+					scene = selection;
 				case SDLK_f:
 					window.toggle_fullscreen();
 					break;
@@ -294,13 +282,13 @@ int main(int argc, char* args[])
 				case SDLK_q:
 				case SDLK_BACKSPACE:
 					if (scene == 0)
-						quit = true;
+						scene = 4;
 					else
 						scene = 0;
 				}
 				break;
 			case SDL_QUIT:
-				quit = true;
+				scene = 4;
 			}
 		}
 	}

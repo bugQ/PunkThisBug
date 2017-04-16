@@ -159,7 +159,7 @@ xcopy /YDRi "$(SolutionDir)Assets" "$(OutDir)assets"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="01_hello_SDL.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="SDLfont.cpp" />
     <ClCompile Include="SDLinit.cpp" />
     <ClCompile Include="SDLinit_image.cpp" />
