@@ -157,13 +157,19 @@ xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x64\*.dll" "$(OutDir)."</Command>
   <ItemGroup>
     <ClCompile Include="01_hello_SDL.cpp" />
     <ClCompile Include="SDLinit.cpp" />
+    <ClCompile Include="SDLinit_image.cpp" />
+    <ClCompile Include="SDLrenderer.cpp" />
     <ClCompile Include="SDLsurface.cpp" />
+    <ClCompile Include="SDLtexture.cpp" />
     <ClCompile Include="SDLwindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDLexception.h" />
     <ClInclude Include="SDLinit.h" />
+    <ClInclude Include="SDLinit_image.h" />
+    <ClInclude Include="SDLrenderer.h" />
     <ClInclude Include="SDLsurface.h" />
+    <ClInclude Include="SDLtexture.h" />
     <ClInclude Include="SDLwindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

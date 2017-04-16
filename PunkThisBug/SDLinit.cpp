@@ -6,9 +6,7 @@
 SDLinit::SDLinit(Uint32 flags)
 {
 	if (SDL_Init(flags) < 0)
-	{
 		throw SDLexception(SDL_GetError());
-	}
 }
 
 

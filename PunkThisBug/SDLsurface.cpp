@@ -1,20 +1,25 @@
 #include "SDLsurface.h"
+#include "SDLwindow.h"
 #include "SDLexception.h"
-
+#include <SDL_image.h>
 
 SDLsurface::SDLsurface(SDLwindow & window)
 	: window(&window), ptr(SDL_GetWindowSurface(window.ptr))
 {
-	if (ptr == NULL)
-	{
+	if (ptr == nullptr)
 		throw SDLexception(SDL_GetError());
-	}
 }
 
+SDLsurface::SDLsurface(const char * image_file)
+	: window(nullptr), ptr(IMG_Load(image_file))
+{
+	if (ptr == nullptr)
+		throw SDLexception(SDL_GetError());
+}
 
 SDLsurface::~SDLsurface()
 {
-	if (window != NULL)
+	if (window != nullptr)
 		SDL_FreeSurface(ptr);
 }
 
