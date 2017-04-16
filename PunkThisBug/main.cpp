@@ -18,13 +18,15 @@ int main(int argc, char* args[])
 	SDLinit sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	SDLinit_image sdl_img(IMG_INIT_PNG);
 	SDLinit_ttf sdl_ttf;
-	SDLmixer mixer(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+	SDLmixer mixer(44100, MIX_DEFAULT_FORMAT, 2, 1024);
 
 	// load audio
 	mixer.load_music("assets/Map.ogg");
 	mixer.load_music("assets/Venus.ogg");
 	mixer.load_music("assets/Mars.ogg");
 	mixer.load_music("assets/Mercury.ogg");
+	mixer.load_chunk("assets/2.wav");
+	mixer.load_chunk("assets/4.wav");
 
 	// create window and rendering context
 	SDLwindow window("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
@@ -232,7 +234,10 @@ int main(int argc, char* args[])
 						{
 							selection = i;
 							if (clicking)
+							{
 								scene = selection;
+								mixer.play_chunk(1);
+							}
 							break;
 						}
 					}
@@ -245,7 +250,10 @@ int main(int argc, char* args[])
 				case SDLK_j:
 				case SDLK_s:
 					if (scene == 0)
+					{
 						selection = selection % 4 + 1;
+						mixer.play_chunk(0);
+					}
 					if (scene == 2)
 						monster.animating = !monster.animating;
 					if (scene == 3)
@@ -255,7 +263,10 @@ int main(int argc, char* args[])
 				case SDLK_k:
 				case SDLK_w:
 					if (scene == 0)
+					{
 						selection = (selection + 2) % 4 + 1;
+						mixer.play_chunk(0);
+					}
 					if (scene == 3)
 						explorer.move(SDLK_UP);
 					break;
@@ -289,6 +300,7 @@ int main(int argc, char* args[])
 				case SDLK_SPACE:
 				case SDLK_KP_ENTER:
 					scene = selection;
+					mixer.play_chunk(1);
 					break;
 				case SDLK_f:
 					window.toggle_fullscreen();
