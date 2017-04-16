@@ -1,3 +1,5 @@
+#define SDL_MAIN_HANDLED
+
 #include "SDLinit.h"
 #include "SDLinit_image.h"
 #include "SDLinit_ttf.h"
