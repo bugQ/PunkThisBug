@@ -196,13 +196,35 @@ int main(int argc, char* args[])
 		renderer.present();
 
 		SDL_Delay(16);
-
+		
 		// handle events
 		SDL_Event event;
+		int mouse_x, mouse_y;
+		bool clicking;
 		while (SDL_PollEvent(&event))
 		{
+			clicking = false;
 			switch (event.type)
 			{
+			case SDL_MOUSEBUTTONDOWN:
+				if (SDL_BUTTON(SDL_BUTTON_LEFT))
+					clicking = true;
+			case SDL_MOUSEMOTION:
+				SDL_GetMouseState(&mouse_x, &mouse_y);
+				if (mouse_x >= text_rects[0].x && mouse_x < text_rects[0].x + text_rects[0].w)
+				{
+					for (int i = 1; i <= 4; ++i)
+					{
+						if (mouse_y >= text_rects[i].y && mouse_y < text_rects[i].y + text_rects[i].h)
+						{
+							selection = i;
+							if (clicking)
+								scene = selection;
+							break;
+						}
+					}
+				}
+				break;
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym)
 				{
