@@ -5,7 +5,7 @@
 SDLinit_image::SDLinit_image(Uint32 flags)
 {
 	if (!(IMG_Init(flags) & flags))
-		throw SDLexception(SDL_GetError());
+		throw SDLexception(IMG_GetError());
 }
 
 

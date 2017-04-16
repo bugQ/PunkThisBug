@@ -97,7 +97,8 @@
     <PostBuildEvent>
       <Command>xcopy /YDR "$(SolutionDir)SDL2\lib\x86\*.dll" "$(OutDir)."
 xcopy /YDR "$(SolutionDir)SDL2_image\lib\x86\*.dll" "$(OutDir)."
-xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x86\*.dll" "$(OutDir)."</Command>
+xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x86\*.dll" "$(OutDir)."
+xcopy /YDRi "$(SolutionDir)Assets" "$(OutDir)assets"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -113,7 +114,8 @@ xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x86\*.dll" "$(OutDir)."</Command>
     <PostBuildEvent>
       <Command>xcopy /YDR "$(SolutionDir)SDL2\lib\x64\*.dll" "$(OutDir)."
 xcopy /YDR "$(SolutionDir)SDL2_image\lib\x64\*.dll" "$(OutDir)."
-xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x64\*.dll" "$(OutDir)."</Command>
+xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x64\*.dll" "$(OutDir)."
+xcopy /YDRi "$(SolutionDir)Assets" "$(OutDir)assets"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -132,7 +134,8 @@ xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x64\*.dll" "$(OutDir)."</Command>
     <PostBuildEvent>
       <Command>xcopy /YDR "$(SolutionDir)SDL2\lib\x86\*.dll" "$(OutDir)."
 xcopy /YDR "$(SolutionDir)SDL2_image\lib\x86\*.dll" "$(OutDir)."
-xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x86\*.dll" "$(OutDir)."</Command>
+xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x86\*.dll" "$(OutDir)."
+xcopy /YDRi "$(SolutionDir)Assets" "$(OutDir)assets"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,13 +154,16 @@ xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x86\*.dll" "$(OutDir)."</Command>
     <PostBuildEvent>
       <Command>xcopy /YDR "$(SolutionDir)SDL2\lib\x64\*.dll" "$(OutDir)."
 xcopy /YDR "$(SolutionDir)SDL2_image\lib\x64\*.dll" "$(OutDir)."
-xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x64\*.dll" "$(OutDir)."</Command>
+xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x64\*.dll" "$(OutDir)."
+xcopy /YDRi "$(SolutionDir)Assets" "$(OutDir)assets"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="01_hello_SDL.cpp" />
+    <ClCompile Include="SDLfont.cpp" />
     <ClCompile Include="SDLinit.cpp" />
     <ClCompile Include="SDLinit_image.cpp" />
+    <ClCompile Include="SDLinit_ttf.cpp" />
     <ClCompile Include="SDLrenderer.cpp" />
     <ClCompile Include="SDLsurface.cpp" />
     <ClCompile Include="SDLtexture.cpp" />
@@ -165,8 +171,10 @@ xcopy /YDR "$(SolutionDir)SDL2_ttf\lib\x64\*.dll" "$(OutDir)."</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDLexception.h" />
+    <ClInclude Include="SDLfont.h" />
     <ClInclude Include="SDLinit.h" />
     <ClInclude Include="SDLinit_image.h" />
+    <ClInclude Include="SDLinit_ttf.h" />
     <ClInclude Include="SDLrenderer.h" />
     <ClInclude Include="SDLsurface.h" />
     <ClInclude Include="SDLtexture.h" />

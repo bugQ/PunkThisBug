@@ -1,7 +1,7 @@
 #include "SDLsurface.h"
 #include "SDLwindow.h"
+#include "SDLfont.h"
 #include "SDLexception.h"
-#include <SDL_image.h>
 
 SDLsurface::SDLsurface(SDLwindow & window)
 	: window(&window), ptr(SDL_GetWindowSurface(window.ptr))
@@ -14,12 +14,19 @@ SDLsurface::SDLsurface(const char * image_file)
 	: window(nullptr), ptr(IMG_Load(image_file))
 {
 	if (ptr == nullptr)
-		throw SDLexception(SDL_GetError());
+		throw SDLexception(IMG_GetError());
+}
+
+SDLsurface::SDLsurface(SDLfont & font, const char * text, SDL_Color color)
+	: window(nullptr), ptr(TTF_RenderText_Solid(font.ptr, text, color))
+{
+	if (ptr == nullptr)
+		throw SDLexception(TTF_GetError());
 }
 
 SDLsurface::~SDLsurface()
 {
-	if (window != nullptr)
+	if (window == nullptr)
 		SDL_FreeSurface(ptr);
 }
 

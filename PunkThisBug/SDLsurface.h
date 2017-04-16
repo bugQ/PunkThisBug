@@ -1,7 +1,8 @@
 #pragma once
-#include <SDL.h>
+#include <SDL_image.h>
 
 struct SDLwindow;
+struct SDLfont;
 
 struct SDLsurface
 {
@@ -12,6 +13,7 @@ struct SDLsurface
 
 	SDLsurface(SDLwindow & window);
 	SDLsurface(const char * image_file);
+	SDLsurface(SDLfont & font, const char * text, SDL_Color color);
 	~SDLsurface();
 
 	Uint32 mapRGB(Uint8 r, Uint8 g, Uint8 b);
