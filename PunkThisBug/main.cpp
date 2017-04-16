@@ -3,6 +3,7 @@
 #include "SDLinit.h"
 #include "SDLinit_image.h"
 #include "SDLinit_ttf.h"
+#include "SDLmixer.h"
 #include "SDLwindow.h"
 #include "SDLrenderer.h"
 #include "SDLtexture.h"
@@ -14,9 +15,16 @@ const int SCREEN_H = 720;
 int main(int argc, char* args[])
 {
 	// init libraries
-	SDLinit sdl(SDL_INIT_VIDEO);
+	SDLinit sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	SDLinit_image sdl_img(IMG_INIT_PNG);
 	SDLinit_ttf sdl_ttf;
+	SDLmixer mixer(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+
+	// load audio
+	mixer.load_music("assets/Map.ogg");
+	mixer.load_music("assets/Venus.ogg");
+	mixer.load_music("assets/Mars.ogg");
+	mixer.load_music("assets/Mercury.ogg");
 
 	// create window and rendering context
 	SDLwindow window("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
@@ -168,6 +176,10 @@ int main(int argc, char* args[])
 
 	while (scene < 4)
 	{
+		// BGM
+		if (mixer.current_music() != scene)
+			mixer.play_music(scene);
+
 		// clear to white
 		renderer.set_draw_color(255, 255, 255, 255);
 		renderer.clear();
@@ -277,6 +289,7 @@ int main(int argc, char* args[])
 				case SDLK_SPACE:
 				case SDLK_KP_ENTER:
 					scene = selection;
+					break;
 				case SDLK_f:
 					window.toggle_fullscreen();
 					break;
