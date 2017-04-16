@@ -3,7 +3,7 @@
 
 
 SDLsurface::SDLsurface(SDLwindow & window)
-	: window(window), ptr(SDL_GetWindowSurface(window.ptr))
+	: window(&window), ptr(SDL_GetWindowSurface(window.ptr))
 {
 	if (ptr == NULL)
 	{
@@ -14,7 +14,8 @@ SDLsurface::SDLsurface(SDLwindow & window)
 
 SDLsurface::~SDLsurface()
 {
-	SDL_FreeSurface(ptr);
+	if (window != NULL)
+		SDL_FreeSurface(ptr);
 }
 
 Uint32 SDLsurface::mapRGB(Uint8 r, Uint8 g, Uint8 b)
@@ -29,5 +30,5 @@ int SDLsurface::clear(Uint32 color)
 
 int SDLsurface::update()
 {
-	return SDL_UpdateWindowSurface(window.ptr);
+	return SDL_UpdateWindowSurface(window->ptr);
 }

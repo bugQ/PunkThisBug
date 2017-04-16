@@ -3,7 +3,7 @@
 
 struct SDLsurface
 {
-	SDLwindow & const window;
+	SDLwindow * const window;
 	SDL_Surface * const ptr;
 
 	SDLsurface(SDLwindow & window);
