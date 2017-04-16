@@ -59,7 +59,7 @@ int main(int argc, char* args[])
 		{
 			if (animating)
 			{
-				frame = (frame + 1) % 5;
+				frame = (frame + 1) % 8;
 				src_rect.x = frame * w / 8;
 			}
 		}
